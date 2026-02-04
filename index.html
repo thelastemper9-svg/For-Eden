@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- CUSTOMIZE: Browser tab title -->
+    <title>Will You Be My Valentine? 💝</title>
+    <!-- Google Fonts -->
+    <link
+        href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@400;700&family=Poppins:wght@300;400;600&display=swap"
+        rel="stylesheet">
+    <!-- Styles -->
+    <link rel="stylesheet" href="styles.css">
+</head>
+
+<body>
+    <!-- Floating Background Elements -->
+    <div class="floating-elements">
+        <!-- Hearts and bears will be added here by JavaScript -->
+    </div>
+
+    <!-- Main Content Container -->
+    <div class="container">
+        <h1 id="valentineTitle"></h1>
+
+        <!-- Music Player -->
+        <div id="musicControls" class="music-controls">
+            <button id="musicToggle" class="music-btn">🎵 Play Music</button>
+            <audio id="bgMusic" loop>
+                <source id="musicSource" type="audio/mpeg">
+                Your browser does not support the audio element.
+            </audio>
+        </div>
+
+        <!-- First Question -->
+        <div class="question-section" id="question1">
+            <h2 id="question1Text"></h2>
+            <button class="cute-btn" onclick="moveButton(this)" id="yesBtn1"></button>
+            <button class="cute-btn" onclick="moveButton(this)" id="noBtn1"></button>
+            <!-- CUSTOMIZE: Secret answer text -->
+            <div class="secret-answer">
+                <button class="cute-btn special" onclick="showNextQuestion(2)" id="secretAnswerBtn"></button>
+            </div>
+        </div>
+
+        <!-- Second Question (Love Meter) -->
+        <div class="question-section hidden" id="question2">
+            <h2 id="question2Text"></h2>
+            <!-- Love meter settings: min="0" max="10000" -->
+            <div class="love-meter">
+                <input type="range" min="0" max="10000" value="100" class="slider" id="loveMeter">
+                <p>
+                    <span class="love-value-container"><span id="startText"></span> (<span
+                            id="loveValue">100</span>%)</span>
+                    <span id="extraLove" class="hidden"></span>
+                </p>
+            </div>
+            <button class="cute-btn" onclick="showNextQuestion('Kisses')" id="nextBtn"></button>
+        </div>
+
+        <!-- Kisses Challenge -->
+        <div class="question-section hidden" id="questionKisses">
+            <h2 id="kissesText"></h2>
+            <div class="kiss-counter-container">
+                <span id="kissCounter">0</span> / <span id="kissTarget">10</span> 💋
+            </div>
+            <button class="cute-btn" onclick="sendKiss()" id="sendKissBtn"></button>
+        </div>
+
+        <!-- Movie Question -->
+        <div class="question-section hidden" id="questionMovie">
+            <h2 id="movieText"></h2>
+            <button class="cute-btn" onclick="showNextQuestion('Memories')" id="movieYesBtn"></button>
+            <button class="cute-btn" onclick="moveButton(this)" id="movieNoBtn"></button>
+        </div>
+
+        <!-- NEW: Memories Section -->
+        <div class="question-section hidden" id="questionMemories">
+            <h2 id="memoriesText"></h2>
+            <div class="memories-container" id="memoriesList">
+                <!-- Memories will be generated here -->
+            </div>
+            <button class="cute-btn" onclick="nextMemory()" id="memoriesBtn"></button>
+        </div>
+
+        <!-- NEW: DBD Skill Check Section -->
+        <div class="question-section hidden" id="questionDBD">
+            <h2 id="dbdTitle"></h2>
+            <p id="dbdSubtitle" style="font-size: 1.2rem; color: #ff8787; margin-bottom: 30px;"></p>
+            <div class="dbd-skill-check-container">
+                <div class="dbd-ring">
+                    <div class="dbd-target-zone" id="dbdTarget"></div>
+                    <div class="dbd-needle" id="dbdNeedle"></div>
+                </div>
+            </div>
+            <div class="dbd-feedback hidden" id="dbdFeedback"></div>
+            <button class="cute-btn" id="dbdBtn" onclick="trySkillCheck()">Hit Space or Click!</button>
+        </div>
+
+        <!-- Promises Checklist -->
+        <div class="question-section hidden" id="questionPromises">
+            <h2 id="promisesText"></h2>
+            <div class="checklist-container" id="promisesList">
+                <!-- Checkboxes will be generated here -->
+            </div>
+            <button class="cute-btn disabled" onclick="showNextQuestion('LoveMessage')" id="promisesBtn"
+                disabled></button>
+        </div>
+
+        <!-- NEW: Love Message Section -->
+        <div class="question-section hidden" id="questionLoveMessage">
+            <div class="love-message-container">
+                <h2 id="loveMessageTitle"></h2>
+                <div class="love-message-text" id="loveMessageText"></div>
+                <button class="cute-btn hidden" onclick="showNextQuestion('Choice')" id="loveMessageBtn">Continue
+                    💕</button>
+            </div>
+        </div>
+
+        <!-- NEW: Choice Section -->
+        <div class="question-section hidden" id="questionChoice">
+            <h2 id="choiceTitle"></h2>
+            <p id="choiceSubtitle" style="font-size: 1.2rem; color: #ff8787; margin-bottom: 30px;"></p>
+            <div class="choice-container">
+                <div class="choice-card" onclick="makeChoice('chocolate')">
+                    <div class="choice-emoji">🍫</div>
+                    <div class="choice-label">Chocolate</div>
+                </div>
+                <div class="choice-card" onclick="makeChoice('rose')">
+                    <div class="choice-emoji">🌹</div>
+                    <div class="choice-label">Rose</div>
+                </div>
+            </div>
+            <div class="choice-result hidden" id="choiceResult">
+                <div class="result-emoji" id="resultEmoji"></div>
+                <p id="resultText"></p>
+                <button class="cute-btn" onclick="showNextQuestion('QuestionGame')">Let's Go! 💕</button>
+            </div>
+        </div>
+
+        <!-- NEW: Question Game Section -->
+        <div class="question-section hidden" id="questionQuestionGame">
+            <h2 id="gameTitle"></h2>
+            <p id="gameSubtitle" style="font-size: 1.2rem; color: #ff8787; margin-bottom: 30px;"></p>
+            <div id="gameContainer"></div>
+            <div class="game-result hidden" id="gameResult">
+                <h3 style="font-size: 2rem; margin: 20px 0;">💕</h3>
+                <p id="gameResultText" style="font-size: 1.3rem; line-height: 1.8; white-space: pre-line;"></p>
+                <button class="cute-btn" onclick="showNextQuestion('Quiz')">Next Challenge! 😏</button>
+            </div>
+        </div>
+
+        <!-- NEW: Quiz Section -->
+        <div class="question-section hidden" id="questionQuiz">
+            <h2 id="quizTitle"></h2>
+            <p id="quizSubtitle" style="font-size: 1.2rem; color: #ff8787; margin-bottom: 30px;"></p>
+            <div id="quizContainer"></div>
+            <div class="quiz-result hidden" id="quizResult">
+                <h3 id="quizScoreDisplay" style="font-size: 2.5rem; color: var(--text-color); margin: 20px 0;"></h3>
+                <p id="quizResultText"
+                    style="font-size: 1.3rem; line-height: 1.8; white-space: pre-line; max-width: 500px; margin: 0 auto;">
+                </p>
+                <button class="cute-btn" onclick="showNextQuestion(3)" style="margin-top: 30px;">Ask The Big Question!
+                    🌹</button>
+            </div>
+        </div>
+
+        <!-- Final Question -->
+        <div class="question-section hidden" id="question3">
+            <h2 id="question3Text"></h2>
+            <button class="cute-btn final-yes" onclick="celebrate()" id="yesBtn3"></button>
+            <button class="cute-btn" onclick="moveButton(this)" id="noBtn3"></button>
+        </div>
+
+        <!-- CUSTOMIZE: Celebration message -->
+        <div class="celebration hidden" id="celebration">
+            <h2 id="celebrationTitle"></h2>
+            <p class="celebration-text" id="celebrationMessage"></p>
+            <p class="celebration-text" id="celebrationEmojis"></p>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="config.js"></script>
+    <script src="theme.js"></script>
+    <script src="script.js"></script>
+</body>
+
+</html>
